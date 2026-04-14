@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marwadi University – Rajkot, Gujarat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --mu-navy:   #0d1b3e;
+      --mu-gold:   #c9a94e;
+      --mu-gold2:  #e8c96b;
+      --mu-cream:  #f9f5ee;
+      --mu-white:  #ffffff;
+      --mu-gray:   #6b7280;
+      --mu-light:  #eef1f7;
+      --radius:    12px;
+      --transition: 0.35s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--mu-cream);
+      color: var(--mu-navy);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 999;
+      background: rgba(13,27,62,0.96);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6vw; height: 68px;
+      border-bottom: 1px solid rgba(201,169,78,0.25);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 42px; height: 42px; background: var(--mu-gold);
+      border-radius: 8px; display: grid; place-items: center;
+      font-family: 'Cormorant Garamond', serif; font-weight: 700;
+      font-size: 1.3rem; color: var(--mu-navy);
+    }
+    .nav-logo-text { color: var(--mu-white); }
+    .nav-logo-text strong { display: block; font-size: .95rem; letter-spacing: .04em; }
+    .nav-logo-text span  { display: block; font-size: .7rem; color: var(--mu-gold); letter-spacing: .06em; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,.8); text-decoration: none;
+      font-size: .85rem; letter-spacing: .05em; font-weight: 500;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--mu-gold); }
+    .nav-cta {
+      background: var(--mu-gold); color: var(--mu-navy);
+      padding: .5rem 1.3rem; border-radius: 6px;
+      font-weight: 600; font-size: .85rem; text-decoration: none;
+      transition: background var(--transition);
+    }
+    .nav-cta:hover { background: var(--mu-gold2); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--mu-white); border-radius: 2px; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0d1b3e 0%, #162b6e 55%, #1a3380 100%);
+      display: flex; align-items: center;
+      padding: 120px 6vw 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a94e' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-orb {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,169,78,.15), transparent 70%);
+      animation: pulse 6s ease-in-out infinite alternate;
+    }
+    .hero-orb-1 { width: 600px; height: 600px; right: -100px; top: -100px; }
+    .hero-orb-2 { width: 400px; height: 400px; left: 10%; bottom: -100px; animation-delay: -3s; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+    .hero-content { position: relative; max-width: 680px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,169,78,.15); border: 1px solid rgba(201,169,78,.4);
+      color: var(--mu-gold); padding: .4rem 1rem; border-radius: 50px;
+      font-size: .75rem; letter-spacing: .1em; font-weight: 600;
+      margin-bottom: 1.5rem;
+      animation: fadeUp .8s ease both;
+    }
+    .hero-badge::before { content: '★'; }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 700;
+      color: var(--mu-white); line-height: 1.1; margin-bottom: 1.2rem;
+      animation: fadeUp .8s .15s ease both;
+    }
+    .hero h1 em { color: var(--mu-gold); font-style: normal; }
+    .hero p {
+      font-size: 1.1rem; color: rgba(255,255,255,.75); line-height: 1.7;
+      margin-bottom: 2.5rem; max-width: 540px;
+      animation: fadeUp .8s .3s ease both;
+    }
+    .hero-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp .8s .45s ease both;
+    }
+    .btn-primary {
+      background: var(--mu-gold); color: var(--mu-navy);
+      padding: .85rem 2rem; border-radius: 8px; font-weight: 700;
+      font-size: .95rem; text-decoration: none; transition: all var(--transition);
+      box-shadow: 0 4px 24px rgba(201,169,78,.4);
+    }
+    .btn-primary:hover { background: var(--mu-gold2); transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid rgba(255,255,255,.4); color: var(--mu-white);
+      padding: .85rem 2rem; border-radius: 8px; font-weight: 500;
+      font-size: .95rem; text-decoration: none; transition: all var(--transition);
+    }
+    .btn-outline:hover { border-color: var(--mu-gold); color: var(--mu-gold); }
+
+    .hero-stats {
+      position: absolute; right: 6vw; bottom: 10%; display: flex; gap: 2rem;
+      animation: fadeUp .8s .6s ease both;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat strong {
+      display: block; font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem; color: var(--mu-gold); font-weight: 700; line-height: 1;
+    }
+    .hero-stat span { font-size: .75rem; color: rgba(255,255,255,.6); letter-spacing: .06em; }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 90px 6vw; }
+    .section-tag {
+      display: inline-block; font-size: .72rem; font-weight: 600;
+      letter-spacing: .15em; color: var(--mu-gold);
+      border-left: 3px solid var(--mu-gold); padding-left: .7rem;
+      margin-bottom: 1rem;
+    }
+    h2.section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
+      color: var(--mu-navy); line-height: 1.2; margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1rem; color: var(--mu-gray); line-height: 1.7;
+      max-width: 580px; margin-bottom: 3rem;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--mu-white); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: center;
+    }
+    .about-img-wrap {
+      position: relative; border-radius: var(--radius); overflow: hidden;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--mu-navy) 0%, #243b7a 100%);
+      display: grid; place-items: center;
+    }
+    .about-img-placeholder {
+      text-align: center; color: rgba(255,255,255,.5); padding: 2rem;
+    }
+    .about-img-placeholder svg { width: 80px; height: 80px; margin-bottom: 1rem; }
+    .about-img-placeholder p { font-size: .85rem; }
+    .about-img-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      border: 3px solid var(--mu-gold); border-radius: var(--radius);
+      transform: translate(12px, 12px); z-index: -1;
+    }
+    .about-features { margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .about-feat {
+      display: flex; align-items: flex-start; gap: .7rem; padding: 1rem;
+      background: var(--mu-cream); border-radius: 8px;
+    }
+    .about-feat-icon {
+      width: 36px; height: 36px; background: var(--mu-gold);
+      border-radius: 8px; display: grid; place-items: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .about-feat h4 { font-size: .85rem; font-weight: 600; margin-bottom: .2rem; }
+    .about-feat p  { font-size: .75rem; color: var(--mu-gray); }
+
+    /* ─── PROGRAMS ─── */
+    #programs { background: var(--mu-cream); }
+    .programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .program-card {
+      background: var(--mu-white); border-radius: var(--radius);
+      padding: 2rem; border: 1px solid rgba(13,27,62,.08);
+      transition: all var(--transition); position: relative; overflow: hidden;
+    }
+    .program-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 4px; background: var(--mu-gold);
+      transform: scaleX(0); transform-origin: left; transition: transform var(--transition);
+    }
+    .program-card:hover::before { transform: scaleX(1); }
+    .program-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(13,27,62,.12); }
+    .program-icon {
+      width: 54px; height: 54px; background: var(--mu-light);
+      border-radius: 12px; display: grid; place-items: center;
+      font-size: 1.6rem; margin-bottom: 1.2rem;
+    }
+    .program-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: .5rem; }
+    .program-card p  { font-size: .85rem; color: var(--mu-gray); line-height: 1.6; margin-bottom: 1rem; }
+    .program-tag {
+      display: inline-block; background: var(--mu-cream); color: var(--mu-navy);
+      font-size: .7rem; font-weight: 600; padding: .3rem .7rem;
+      border-radius: 50px; letter-spacing: .05em;
+    }
+
+    /* ─── FACILITIES ─── */
+    #facilities { background: var(--mu-navy); }
+    #facilities .section-tag { color: var(--mu-gold); }
+    #facilities h2.section-title { color: var(--mu-white); }
+    #facilities .section-sub { color: rgba(255,255,255,.6); }
+    .facilities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+    .facility-card {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(201,169,78,.2);
+      border-radius: var(--radius); padding: 1.8rem; text-align: center;
+      transition: all var(--transition);
+    }
+    .facility-card:hover {
+      background: rgba(201,169,78,.1); border-color: var(--mu-gold);
+      transform: translateY(-4px);
+    }
+    .facility-card .icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .facility-card h4 { color: var(--mu-white); font-size: .95rem; margin-bottom: .4rem; }
+    .facility-card p  { color: rgba(255,255,255,.5); font-size: .78rem; }
+
+    /* ─── RANKINGS ─── */
+    #rankings { background: var(--mu-cream); }
+    .rankings-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .rank-card {
+      flex: 1; min-width: 180px;
+      background: var(--mu-white); border-radius: var(--radius);
+      padding: 2rem; text-align: center;
+      border-bottom: 4px solid var(--mu-gold);
+      box-shadow: 0 4px 24px rgba(13,27,62,.06);
+    }
+    .rank-card .rank-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 700; color: var(--mu-gold); line-height: 1;
+    }
+    .rank-card .rank-body { font-size: .78rem; font-weight: 600; color: var(--mu-navy); margin: .5rem 0 .3rem; }
+    .rank-card .rank-by  { font-size: .7rem; color: var(--mu-gray); }
+
+    /* ─── ADMISSIONS ─── */
+    #admissions { background: var(--mu-white); }
+    .admissions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .steps { display: flex; flex-direction: column; gap: 1.5rem; }
+    .step { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--mu-gold); color: var(--mu-navy);
+      font-weight: 700; font-size: .9rem;
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .step h4 { font-size: .95rem; font-weight: 600; margin-bottom: .3rem; }
+    .step p  { font-size: .83rem; color: var(--mu-gray); line-height: 1.6; }
+    .contact-card {
+      background: var(--mu-navy); border-radius: var(--radius);
+      padding: 2.5rem; color: var(--mu-white);
+    }
+    .contact-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; color: var(--mu-gold); margin-bottom: 1.5rem;
+    }
+    .contact-item { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.2rem; }
+    .contact-item .ci-icon {
+      width: 38px; height: 38px; background: rgba(201,169,78,.15);
+      border-radius: 8px; display: grid; place-items: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .contact-item h5 { font-size: .75rem; color: rgba(255,255,255,.5); margin-bottom: .2rem; }
+    .contact-item p  { font-size: .88rem; }
+    .contact-card a.apply-btn {
+      display: block; text-align: center; margin-top: 2rem;
+      background: var(--mu-gold); color: var(--mu-navy);
+      padding: 1rem; border-radius: 8px; font-weight: 700;
+      text-decoration: none; transition: background var(--transition);
+    }
+    .contact-card a.apply-btn:hover { background: var(--mu-gold2); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #070e20; color: rgba(255,255,255,.6);
+      padding: 60px 6vw 30px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-brand .nav-logo { display: inline-flex; margin-bottom: 1rem; }
+    .footer-brand p { font-size: .83rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h5 { color: var(--mu-white); font-size: .85rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: .05em; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .footer-col ul a { color: rgba(255,255,255,.55); text-decoration: none; font-size: .82rem; transition: color var(--transition); }
+    .footer-col ul a:hover { color: var(--mu-gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .75rem; flex-wrap: wrap; gap: .5rem;
+    }
+    .footer-bottom a { color: var(--mu-gold); text-decoration: none; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .about-grid, .admissions-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stats { position: static; margin-top: 3rem; flex-wrap: wrap; }
+      .hero { flex-direction: column; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 560px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .about-features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">MU</div>
+      <div class="nav-logo-text">
+        <strong>Marwadi University</strong>
+        <span>RAJKOT · GUJARAT</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#programs">Programs</a></li>
+      <li><a href="#facilities">Campus</a></li>
+      <li><a href="#rankings">Rankings</a></li>
+      <li><a href="#admissions">Admissions</a></li>
+    </ul>
+    <a href="#admissions" class="nav-cta">Apply Now</a>
+    <div class="hamburger" onclick="document.querySelector('.nav-links').style.display='flex'; this.style.display='none'">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-content">
+      <div class="hero-badge">NAAC Accredited University</div>
+      <h1>Shape Your Future at <em>Marwadi University</em></h1>
+      <p>A premier institution in Rajkot, Gujarat committed to excellence in education, innovation, and research — empowering students to become global leaders.</p>
+      <div class="hero-btns">
+        <a href="#programs" class="btn-primary">Explore Programs</a>
+        <a href="#admissions" class="btn-outline">Admissions 2025–26</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>12,000+</strong><span>STUDENTS</span></div>
+      <div class="hero-stat"><strong>200+</strong><span>PROGRAMS</span></div>
+      <div class="hero-stat"><strong>95%</strong><span>PLACEMENT</span></div>
+      <div class="hero-stat"><strong>500+</strong><span>FACULTY</span></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-img-wrap reveal">
+        <div class="about-img-placeholder">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="35" width="60" height="35" rx="3" fill="rgba(201,169,78,0.3)" stroke="rgba(201,169,78,0.6)" stroke-width="1.5"/>
+            <rect x="20" y="25" width="40" height="15" rx="2" fill="rgba(201,169,78,0.2)" stroke="rgba(201,169,78,0.5)" stroke-width="1.5"/>
+            <polygon points="40,10 20,26 60,26" fill="rgba(201,169,78,0.4)" stroke="rgba(201,169,78,0.7)" stroke-width="1.5"/>
+            <rect x="33" y="50" width="14" height="20" rx="1" fill="rgba(201,169,78,0.4)"/>
+            <rect x="15" y="42" width="12" height="12" rx="1" fill="rgba(201,169,78,0.2)" stroke="rgba(201,169,78,0.4)" stroke-width="1"/>
+            <rect x="53" y="42" width="12" height="12" rx="1" fill="rgba(201,169,78,0.2)" stroke="rgba(201,169,78,0.4)" stroke-width="1"/>
+          </svg>
+          <p>Marwadi University Campus<br>Rajkot, Gujarat</p>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="section-tag">ABOUT US</div>
+        <h2 class="section-title">A Legacy of Excellence Since 2015</h2>
+        <p class="section-sub">Established under the Government of Gujarat, Marwadi University has rapidly grown into one of Western India's most respected private universities — blending industry-integrated education with cutting-edge research.</p>
+        <div class="about-features">
+          <div class="about-feat">
+            <div class="about-feat-icon">🎓</div>
+            <div><h4>NAAC Accredited</h4><p>Recognized for academic excellence</p></div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon">🌐</div>
+            <div><h4>Global Tie-ups</h4><p>International university partnerships</p></div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon">🏭</div>
+            <div><h4>Industry Connect</h4><p>500+ industry collaborations</p></div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon">🔬</div>
+            <div><h4>Research Focus</h4><p>Active R&D centres & incubators</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS -->
+  <section id="programs">
+    <div class="reveal">
+      <div class="section-tag">ACADEMICS</div>
+      <h2 class="section-title">Programs We Offer</h2>
+      <p class="section-sub">Choose from a wide spectrum of undergraduate, postgraduate, and doctoral programs designed to meet global industry demands.</p>
+    </div>
+    <div class="programs-grid reveal">
+      <div class="program-card">
+        <div class="program-icon">💻</div>
+        <h3>Computer Science & Engineering</h3>
+        <p>AI/ML, Cybersecurity, Cloud Computing, Data Science and full-stack development tracks.</p>
+        <span class="program-tag">B.Tech · M.Tech · Ph.D</span>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">⚙️</div>
+        <h3>Mechanical Engineering</h3>
+        <p>Manufacturing, Robotics, Thermal & Automotive Engineering with live industry projects.</p>
+        <span class="program-tag">B.Tech · M.Tech</span>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">⚡</div>
+        <h3>Electrical Engineering</h3>
+        <p>Power Systems, VLSI Design, Embedded Systems, and Renewable Energy specializations.</p>
+        <span class="program-tag">B.Tech · M.Tech</span>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">📊</div>
+        <h3>Business Administration</h3>
+        <p>Finance, Marketing, HR, Operations, and Entrepreneurship streams with live case studies.</p>
+        <span class="program-tag">BBA · MBA · Ph.D</span>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">🏛️</div>
+        <h3>Architecture</h3>
+        <p>Sustainable design, Urban Planning and Interior Architecture with studio-based learning.</p>
+        <span class="program-tag">B.Arch · M.Arch</span>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">💊</div>
+        <h3>Pharmacy</h3>
+        <p>Pharmaceutical Sciences, Clinical Research and Drug Regulatory Affairs programs.</p>
+        <span class="program-tag">B.Pharm · M.Pharm</span>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">🎨</div>
+        <h3>Design</h3>
+        <p>Product Design, UX/UI Design, Communication Design and Fashion Technology courses.</p>
+        <span class="program-tag">B.Des · M.Des</span>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">⚖️</div>
+        <h3>Law</h3>
+        <p>Corporate Law, Criminal Law, IPR and Constitutional Law with moot court facilities.</p>
+        <span class="program-tag">BA LLB · LLM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACILITIES -->
+  <section id="facilities">
+    <div class="reveal">
+      <div class="section-tag">CAMPUS LIFE</div>
+      <h2 class="section-title">World-Class Facilities</h2>
+      <p class="section-sub">Our 150-acre campus in Rajkot is a self-sufficient ecosystem built to nurture talent, creativity, and community.</p>
+    </div>
+    <div class="facilities-grid reveal">
+      <div class="facility-card"><div class="icon">📚</div><h4>Central Library</h4><p>Over 1 lakh books & digital resources</p></div>
+      <div class="facility-card"><div class="icon">🖥️</div><h4>Smart Classrooms</h4><p>Interactive, tech-enabled learning spaces</p></div>
+      <div class="facility-card"><div class="icon">🔬</div><h4>Research Labs</h4><p>State-of-the-art R&D infrastructure</p></div>
+      <div class="facility-card"><div class="icon">🏋️</div><h4>Sports Complex</h4><p>Indoor & outdoor sports facilities</p></div>
+      <div class="facility-card"><div class="icon">🏠</div><h4>Hostel</h4><p>Separate boys & girls accommodation</p></div>
+      <div class="facility-card"><div class="icon">🍽️</div><h4>Food Court</h4><p>Multi-cuisine cafeteria and eateries</p></div>
+      <div class="facility-card"><div class="icon">🏥</div><h4>Health Centre</h4><p>On-campus medical & counselling services</p></div>
+      <div class="facility-card"><div class="icon">🚌</div><h4>Transport</h4><p>Bus service across Rajkot city</p></div>
+    </div>
+  </section>
+
+  <!-- RANKINGS -->
+  <section id="rankings">
+    <div class="reveal">
+      <div class="section-tag">RECOGNITION</div>
+      <h2 class="section-title">Awards & Rankings</h2>
+      <p class="section-sub">Marwadi University continues to be recognized by leading national and international bodies for its academic and research contributions.</p>
+    </div>
+    <div class="rankings-row reveal">
+      <div class="rank-card">
+        <div class="rank-num">A</div>
+        <div class="rank-body">NAAC Grade</div>
+        <div class="rank-by">National Assessment & Accreditation Council</div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-num">Top<br>100</div>
+        <div class="rank-body">Engineering Universities</div>
+        <div class="rank-by">NIRF India Rankings</div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-num">5★</div>
+        <div class="rank-body">QS Rating</div>
+        <div class="rank-by">Teaching & Employability</div>
+      </div>
+      <div class="rank-card">
+        <div class="rank-num">#1</div>
+        <div class="rank-body">Emerging University</div>
+        <div class="rank-by">Gujarat State – Times Education</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMISSIONS -->
+  <section id="admissions">
+    <div class="admissions-grid">
+      <div class="reveal">
+        <div class="section-tag">ADMISSIONS 2025–26</div>
+        <h2 class="section-title">How to Apply</h2>
+        <p class="section-sub">Joining Marwadi University is simple and transparent. Follow these steps to begin your academic journey.</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div><h4>Register Online</h4><p>Create your profile at admissions.marwadiuniversity.ac.in</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div><h4>Submit Documents</h4><p>Upload mark sheets, ID proof, and passport-size photograph</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div><h4>Entrance / Merit</h4><p>Appear for MUSAT or provide JEE/GUJCET scores as applicable</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div><h4>Counselling & Offer</h4><p>Attend counselling, select your program, and receive offer letter</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div><h4>Fee & Enrolment</h4><p>Pay fees to confirm admission and collect your ID card</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="contact-card">
+          <h3>Contact Admissions</h3>
+          <div class="contact-item">
+            <div class="ci-icon">📍</div>
+            <div>
+              <h5>ADDRESS</h5>
+              <p>Marwadi University, Rajkot – Morbi Highway,<br>Rajkot – 360003, Gujarat, India</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon">📞</div>
+            <div>
+              <h5>PHONE</h5>
+              <p>+91-90990 09938 / 33</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon">📧</div>
+            <div>
+              <h5>EMAIL</h5>
+              <p>admissions@marwadiuniversity.ac.in</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon">🌐</div>
+            <div>
+              <h5>WEBSITE</h5>
+              <p>www.marwadiuniversity.ac.in</p>
+            </div>
+          </div>
+          <a href="https://www.marwadiuniversity.ac.in" target="_blank" class="apply-btn">Apply Online →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">
+          <div class="nav-logo-icon">MU</div>
+          <div class="nav-logo-text">
+            <strong>Marwadi University</strong>
+            <span>RAJKOT · GUJARAT</span>
+          </div>
+        </a>
+        <p>Empowering the next generation of thinkers, innovators, and leaders through quality education and research.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Academics</h5>
+        <ul>
+          <li><a href="#programs">Engineering</a></li>
+          <li><a href="#programs">Management</a></li>
+          <li><a href="#programs">Design</a></li>
+          <li><a href="#programs">Law</a></li>
+          <li><a href="#programs">Pharmacy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Campus</h5>
+        <ul>
+          <li><a href="#facilities">Library</a></li>
+          <li><a href="#facilities">Hostel</a></li>
+          <li><a href="#facilities">Sports</a></li>
+          <li><a href="#facilities">Research Labs</a></li>
+          <li><a href="#facilities">Transport</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#admissions">Admissions</a></li>
+          <li><a href="#rankings">Rankings</a></li>
+          <li><a href="#about">About MU</a></li>
+          <li><a href="https://www.marwadiuniversity.ac.in" target="_blank">Official Website</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Marwadi University. All rights reserved.</span>
+      <span>Rajkot – Morbi Highway, Rajkot 360003, Gujarat, India</span>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Smooth nav highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let cur = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--mu-gold)' : '';
+      });
+    });
+
+    // Counter animation
+    const counters = document.querySelectorAll('.hero-stat strong');
+    counters.forEach(el => {
+      const target = el.textContent;
+      const num = parseInt(target.replace(/[^0-9]/g, ''));
+      if (!isNaN(num)) {
+        let count = 0;
+        const step = Math.ceil(num / 60);
+        const timer = setInterval(() => {
+          count = Math.min(count + step, num);
+          el.textContent = target.replace(/[0-9,]+/, count.toLocaleString());
+          if (count >= num) clearInterval(timer);
+        }, 25);
+      }
+    });
+  </script>
+</body>
+</html>

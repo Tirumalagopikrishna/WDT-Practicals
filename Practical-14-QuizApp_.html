@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>QuizMaster</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --border: #2a2a3a;
+    --accent: #f0c040;
+    --accent2: #e05a5a;
+    --accent3: #5ae0b0;
+    --text: #f0ede8;
+    --muted: #7a7a9a;
+    --correct: #3ddc84;
+    --wrong: #ff5c5c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(240,192,64,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,192,64,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* Glow blob */
+  body::after {
+    content: '';
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(240,192,64,0.06) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+  }
+
+  .app {
+    width: min(680px, 95vw);
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; animation: fadeIn 0.5s ease; }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── START SCREEN ── */
+  .start-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(240,192,64,0.12);
+    border: 1px solid rgba(240,192,64,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+  }
+  .start-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 10vw, 80px);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -2px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .start-title span {
+    color: var(--accent);
+    display: block;
+  }
+  .start-sub {
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 auto 40px;
+  }
+
+  .info-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .info-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .info-chip .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #0a0a0f;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 16px 36px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-primary:hover {
+    background: #ffd060;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(240,192,64,0.3);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── QUIZ SCREEN ── */
+  .quiz-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .q-counter {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .q-counter span { color: var(--accent); }
+
+  .score-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .score-pill .s-icon { color: var(--accent); }
+
+  /* Progress bar */
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #ffd060);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 36px 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 32px; right: 32px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .q-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(19px, 4vw, 24px);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  /* Options */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .option-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn .opt-label {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: rgba(240,192,64,0.5);
+    background: rgba(240,192,64,0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .option-btn:hover:not(:disabled) .opt-label {
+    background: var(--accent);
+    color: #0a0a0f;
+    border-color: var(--accent);
+  }
+  .option-btn:disabled { cursor: default; transform: none !important; }
+
+  .option-btn.correct {
+    border-color: var(--correct);
+    background: rgba(61,220,132,0.08);
+  }
+  .option-btn.correct .opt-label {
+    background: var(--correct);
+    color: #0a0a0f;
+    border-color: var(--correct);
+  }
+  .option-btn.wrong {
+    border-color: var(--wrong);
+    background: rgba(255,92,92,0.08);
+  }
+  .option-btn.wrong .opt-label {
+    background: var(--wrong);
+    color: #fff;
+    border-color: var(--wrong);
+  }
+  .option-btn.dimmed { opacity: 0.35; }
+
+  /* Feedback bar */
+  .feedback-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 20px;
+    min-height: 58px;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+  }
+  .feedback-bar.show-correct {
+    border-color: rgba(61,220,132,0.4);
+    background: rgba(61,220,132,0.06);
+  }
+  .feedback-bar.show-wrong {
+    border-color: rgba(255,92,92,0.4);
+    background: rgba(255,92,92,0.06);
+  }
+  .feedback-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .feedback-icon { font-size: 20px; }
+  .feedback-text { color: var(--muted); }
+  .feedback-text strong { color: var(--text); }
+
+  /* ── RESULT SCREEN ── */
+  .result-wrapper { text-align: center; }
+
+  .result-ring {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 32px;
+  }
+  .result-ring svg {
+    width: 160px; height: 160px;
+    transform: rotate(-90deg);
+  }
+  .ring-bg { fill: none; stroke: var(--border); stroke-width: 8; }
+  .ring-fill {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .ring-fill.perfect { stroke: var(--correct); }
+  .ring-fill.low { stroke: var(--wrong); }
+  .ring-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .ring-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text);
+  }
+  .ring-total {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .result-emoji { font-size: 40px; margin-bottom: 12px; }
+  .result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 900;
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+  .result-msg {
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 300;
+    margin-bottom: 40px;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 28px;
+    min-width: 100px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .stat-num.green { color: var(--correct); }
+  .stat-num.red { color: var(--wrong); }
+  .stat-num.yellow { color: var(--accent); }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── NEXT BTN ── */
+  .nav-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* Confetti */
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    top: -10px;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- START SCREEN -->
+  <div class="screen active" id="startScreen">
+    <div class="start-header">
+      <div class="badge">⚡ Brain Challenge</div>
+      <h1 class="start-title">Quiz<span>Master</span></h1>
+      <p class="start-sub">Test your knowledge across science, history, geography, and more. One question at a time.</p>
+    </div>
+    <div class="info-row">
+      <div class="info-chip"><span class="dot"></span>10 Questions</div>
+      <div class="info-chip"><span class="dot"></span>4 Categories</div>
+      <div class="info-chip"><span class="dot"></span>Instant Feedback</div>
+    </div>
+    <div style="text-align:center;">
+      <button class="btn-primary" onclick="startQuiz()">Start Quiz →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="screen" id="quizScreen">
+    <div class="quiz-meta">
+      <div class="q-counter">Question <span id="qNum">1</span> / <span id="qTotal">10</span></div>
+      <div class="score-pill"><span class="s-icon">★</span> <span id="livScore">0</span> pts</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="q-card">
+      <div class="q-num" id="qCategory">Science</div>
+      <div class="q-text" id="qText">Loading question…</div>
+    </div>
+    <div class="options-grid" id="optionsGrid"></div>
+    <div class="feedback-bar" id="feedbackBar">
+      <div class="feedback-left">
+        <span class="feedback-icon" id="fbIcon">💡</span>
+        <span class="feedback-text" id="fbText">Choose an answer above</span>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">
+        <span id="nextBtnLabel">Next →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="screen" id="resultScreen">
+    <div class="result-wrapper">
+      <div class="result-ring">
+        <svg viewBox="0 0 160 160">
+          <circle class="ring-bg" cx="80" cy="80" r="70"/>
+          <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="70"/>
+        </svg>
+        <div class="ring-inner">
+          <div class="ring-score" id="ringScore">0</div>
+          <div class="ring-total" id="ringTotal">/ 10</div>
+        </div>
+      </div>
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="result-title" id="resultTitle">Excellent!</div>
+      <div class="result-msg" id="resultMsg">You're a true quiz champion.</div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num green" id="statCorrect">0</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num red" id="statWrong">0</div>
+          <div class="stat-label">Wrong</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num yellow" id="statPct">0%</div>
+          <div class="stat-label">Score</div>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button class="btn-primary" onclick="restartQuiz()">↺ Play Again</button>
+        <button class="btn-ghost" onclick="shareResult()">⇪ Share Score</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+const QUESTIONS = [
+  {
+    category: "🔬 Science",
+    text: "What is the chemical symbol for Gold?",
+    options: ["Go", "Gd", "Au", "Ag"],
+    answer: 2
+  },
+  {
+    category: "🌍 Geography",
+    text: "Which is the largest ocean on Earth?",
+    options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+    answer: 3
+  },
+  {
+    category: "📜 History",
+    text: "In which year did World War II end?",
+    options: ["1943", "1945", "1947", "1950"],
+    answer: 1
+  },
+  {
+    category: "🔬 Science",
+    text: "How many bones are in the adult human body?",
+    options: ["196", "206", "216", "226"],
+    answer: 1
+  },
+  {
+    category: "🎨 Culture",
+    text: "Who painted the Mona Lisa?",
+    options: ["Michelangelo", "Raphael", "Leonardo da Vinci", "Caravaggio"],
+    answer: 2
+  },
+  {
+    category: "🌍 Geography",
+    text: "Which country has the most natural lakes?",
+    options: ["Russia", "USA", "Brazil", "Canada"],
+    answer: 3
+  },
+  {
+    category: "🔬 Science",
+    text: "What planet is known as the Red Planet?",
+    options: ["Venus", "Jupiter", "Mars", "Saturn"],
+    answer: 2
+  },
+  {
+    category: "📜 History",
+    text: "Who was the first person to walk on the Moon?",
+    options: ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "John Glenn"],
+    answer: 2
+  },
+  {
+    category: "🎨 Culture",
+    text: "In which country was the first pizza invented?",
+    options: ["Greece", "France", "Spain", "Italy"],
+    answer: 3
+  },
+  {
+    category: "🔬 Science",
+    text: "What is the speed of light (approx.) in km/s?",
+    options: ["100,000", "300,000", "500,000", "700,000"],
+    answer: 1
+  }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let correctCount = 0;
+let wrongCount = 0;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz() {
+  currentQ = 0; score = 0; correctCount = 0; wrongCount = 0;
+  showScreen('quizScreen');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+
+  document.getElementById('qNum').textContent = currentQ + 1;
+  document.getElementById('qTotal').textContent = total;
+  document.getElementById('qCategory').textContent = q.category;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('livScore').textContent = score;
+  document.getElementById('progressFill').style.width = (currentQ / total * 100) + '%';
+
+  // Reset feedback
+  const fb = document.getElementById('feedbackBar');
+  fb.className = 'feedback-bar';
+  document.getElementById('fbIcon').textContent = '💡';
+  document.getElementById('fbText').innerHTML = 'Choose an answer above';
+
+  document.getElementById('nextBtn').style.display = 'none';
+
+  // Render options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-label">${LABELS[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  // Animate in
+  document.querySelector('.q-card').style.animation = 'none';
+  requestAnimationFrame(() => {
+    document.querySelector('.q-card').style.animation = 'fadeIn 0.4s ease';
+  });
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = QUESTIONS[currentQ];
+  const btns = document.querySelectorAll('.option-btn');
+  const fb = document.getElementById('feedbackBar');
+
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) {
+      btn.classList.add('correct');
+    } else if (i === idx && idx !== q.answer) {
+      btn.classList.add('wrong');
+    } else {
+      btn.classList.add('dimmed');
+    }
+  });
+
+  const isCorrect = idx === q.answer;
+
+  if (isCorrect) {
+    score += 10;
+    correctCount++;
+    fb.classList.add('show-correct');
+    document.getElementById('fbIcon').textContent = '✅';
+    document.getElementById('fbText').innerHTML = '<strong>Correct!</strong> +10 points';
+    document.getElementById('livScore').textContent = score;
+  } else {
+    wrongCount++;
+    fb.classList.add('show-wrong');
+    document.getElementById('fbIcon').textContent = '❌';
+    document.getElementById('fbText').innerHTML = `<strong>Wrong.</strong> Correct answer: <strong>${q.options[q.answer]}</strong>`;
+  }
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'inline-flex';
+  document.getElementById('nextBtnLabel').textContent =
+    currentQ < QUESTIONS.length - 1 ? 'Next →' : 'See Results →';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ < QUESTIONS.length) {
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  showScreen('resultScreen');
+  const total = QUESTIONS.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  document.getElementById('ringScore').textContent = correctCount;
+  document.getElementById('ringTotal').textContent = `/ ${total}`;
+  document.getElementById('statCorrect').textContent = correctCount;
+  document.getElementById('statWrong').textContent = wrongCount;
+  document.getElementById('statPct').textContent = pct + '%';
+
+  // Ring animation
+  const ring = document.getElementById('ringFill');
+  const circumference = 440;
+  const offset = circumference - (pct / 100) * circumference;
+  ring.style.strokeDashoffset = circumference;
+  ring.className = 'ring-fill' + (pct === 100 ? ' perfect' : pct < 40 ? ' low' : '');
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+
+  // Messages
+  let emoji, title, msg;
+  if (pct === 100) {
+    emoji = '🏆'; title = 'Flawless!'; msg = 'Perfect score! You know your stuff inside out.';
+    spawnConfetti();
+  } else if (pct >= 80) {
+    emoji = '🎉'; title = 'Excellent!'; msg = 'Outstanding performance. Just a few slip-ups!';
+    spawnConfetti();
+  } else if (pct >= 60) {
+    emoji = '👍'; title = 'Good Job!'; msg = 'Solid effort. Keep studying and you\'ll ace it next time.';
+  } else if (pct >= 40) {
+    emoji = '🤔'; title = 'Not Bad'; msg = 'You\'re getting there. A little more practice will go a long way.';
+  } else {
+    emoji = '📚'; title = 'Keep Going!'; msg = 'Don\'t give up — every expert was once a beginner.';
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMsg').textContent = msg;
+}
+
+function restartQuiz() {
+  document.getElementById('confettiContainer').innerHTML = '';
+  startQuiz();
+}
+
+function shareResult() {
+  const pct = Math.round((correctCount / QUESTIONS.length) * 100);
+  const txt = `I scored ${correctCount}/${QUESTIONS.length} (${pct}%) on QuizMaster! 🧠⚡`;
+  if (navigator.share) {
+    navigator.share({ title: 'QuizMaster Score', text: txt });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(() => alert('Score copied to clipboard! 📋'));
+  } else {
+    alert(txt);
+  }
+}
+
+function spawnConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#f0c040','#e05a5a','#5ae0b0','#a0c8ff','#ff9a5c','#d0a0ff'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      animation-duration: ${1.5 + Math.random() * 2}s;
+      animation-delay: ${Math.random() * 0.8}s;
+      transform: rotate(${Math.random() * 360}deg);
+      width: ${6 + Math.random() * 8}px;
+      height: ${6 + Math.random() * 8}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+    `;
+    container.appendChild(piece);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 4000);
+}
+</script>
+</body>
+</html>

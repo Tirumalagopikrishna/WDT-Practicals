@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Bootstrap Full Image Carousel</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#f4f6fb;
+}
+
+/* Full slide images */
+.carousel-item img{
+height:600px;
+object-fit:cover;
+}
+
+/* Caption box */
+.carousel-caption{
+background:rgba(0,0,0,0.5);
+padding:20px;
+border-radius:10px;
+}
+
+.carousel-caption h2{
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+
+<!-- Indicators -->
+
+<div class="carousel-indicators">
+
+<button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></button>
+
+<button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1"></button>
+
+<button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2"></button>
+
+</div>
+
+<!-- Slides -->
+
+<div class="carousel-inner">
+
+<!-- Slide 1 -->
+
+<div class="carousel-item active">
+
+<img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470" class="d-block w-100">
+
+<div class="carousel-caption">
+
+<h2>Explore Mountains</h2>
+
+<p>Experience the beauty of nature and adventure.</p>
+
+</div>
+
+</div>
+
+<!-- Slide 2 -->
+
+<div class="carousel-item">
+
+<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" class="d-block w-100">
+
+<div class="carousel-caption">
+
+<h2>Relax at the Beach</h2>
+
+<p>Enjoy crystal clear water and peaceful sunsets.</p>
+
+</div>
+
+</div>
+
+<!-- Slide 3 -->
+
+<div class="carousel-item">
+
+<img src="https://i.pinimg.com/originals/74/7f/87/747f879655e7564f63ce565ae5e0e471.jpg" class="d-block w-100">
+
+<div class="carousel-caption">
+
+<h2>Discover Cities</h2>
+
+<p>Explore vibrant urban destinations around the world.</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Controls -->
+
+<button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+
+<span class="carousel-control-prev-icon"></span>
+
+</button>
+
+<button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+
+<span class="carousel-control-next-icon"></span>
+
+</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Navbar with Dropdown</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .brand { font-family: 'Syne', sans-serif; }
+    .dropdown { display: none; opacity: 0; transform: translateY(-8px); transition: all 0.22s cubic-bezier(.4,0,.2,1); }
+    .group:hover .dropdown { display: block; opacity: 1; transform: translateY(0); }
+    .nav-link::after { content: ''; display: block; height: 2px; width: 0; background: #f97316; transition: width 0.25s; }
+    .nav-link:hover::after { width: 100%; }
+    .mobile-menu { display: none; }
+    .mobile-menu.open { display: block; }
+    .chevron { transition: transform 0.22s; }
+    .group:hover .chevron { transform: rotate(180deg); }
+  </style>
+</head>
+<body class="bg-zinc-950 min-h-screen text-zinc-100">
+
+<!-- ─── NAVBAR ─────────────────────────────────────────────── -->
+<nav class="fixed top-0 inset-x-0 z-50 bg-zinc-950/90 backdrop-blur border-b border-zinc-800">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+
+    <!-- Brand -->
+    <a href="#" class="brand text-xl font-800 tracking-tight text-white flex items-center gap-2">
+      <span class="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-sm font-bold">N</span>
+      Nexus
+    </a>
+
+    <!-- Desktop Links -->
+    <ul class="hidden md:flex items-center gap-1 text-sm font-medium text-zinc-400">
+
+      <li><a href="#" class="nav-link px-3 py-2 rounded-md hover:text-white transition-colors">Home</a></li>
+
+      <!-- Products dropdown -->
+      <li class="group relative">
+        <button class="nav-link px-3 py-2 rounded-md hover:text-white transition-colors flex items-center gap-1">
+          Products
+          <svg class="chevron w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="dropdown absolute left-0 top-full mt-2 w-64 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl shadow-black/60 p-2">
+          <a href="#" class="flex items-start gap-3 px-3 py-3 rounded-lg hover:bg-zinc-800 transition-colors">
+            <span class="mt-0.5 w-8 h-8 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-base">⚡</span>
+            <div><div class="text-white font-semibold text-sm">Analytics</div><div class="text-zinc-500 text-xs mt-0.5">Real-time dashboards & insights</div></div>
+          </a>
+          <a href="#" class="flex items-start gap-3 px-3 py-3 rounded-lg hover:bg-zinc-800 transition-colors">
+            <span class="mt-0.5 w-8 h-8 rounded-lg bg-violet-500/10 text-violet-400 flex items-center justify-center text-base">🔒</span>
+            <div><div class="text-white font-semibold text-sm">Security</div><div class="text-zinc-500 text-xs mt-0.5">Enterprise-grade protection</div></div>
+          </a>
+          <a href="#" class="flex items-start gap-3 px-3 py-3 rounded-lg hover:bg-zinc-800 transition-colors">
+            <span class="mt-0.5 w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base">🚀</span>
+            <div><div class="text-white font-semibold text-sm">Deployment</div><div class="text-zinc-500 text-xs mt-0.5">One-click global deploys</div></div>
+          </a>
+          <div class="border-t border-zinc-800 mt-2 pt-2">
+            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg text-orange-400 hover:bg-zinc-800 text-xs font-medium transition-colors">View all products →</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Solutions dropdown -->
+      <li class="group relative">
+        <button class="nav-link px-3 py-2 rounded-md hover:text-white transition-colors flex items-center gap-1">
+          Solutions
+          <svg class="chevron w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="dropdown absolute left-0 top-full mt-2 w-56 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl shadow-black/60 p-2">
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">For Startups</a>
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">For Enterprise</a>
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">For Developers</a>
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Agency Partners</a>
+        </div>
+      </li>
+
+      <!-- Resources dropdown -->
+      <li class="group relative">
+        <button class="nav-link px-3 py-2 rounded-md hover:text-white transition-colors flex items-center gap-1">
+          Resources
+          <svg class="chevron w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="dropdown absolute left-0 top-full mt-2 w-52 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl shadow-black/60 p-2">
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Documentation</a>
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Blog</a>
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Changelog</a>
+          <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Community</a>
+        </div>
+      </li>
+
+      <li><a href="#" class="nav-link px-3 py-2 rounded-md hover:text-white transition-colors">Pricing</a></li>
+    </ul>
+
+    <!-- CTA Buttons -->
+    <div class="hidden md:flex items-center gap-3">
+      <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors font-medium">Sign in</a>
+      <a href="#" class="text-sm bg-orange-500 hover:bg-orange-400 text-white font-semibold px-4 py-2 rounded-lg transition-colors shadow-lg shadow-orange-500/20">Get started</a>
+    </div>
+
+    <!-- Mobile Hamburger -->
+    <button onclick="document.getElementById('mobile-menu').classList.toggle('open')" class="md:hidden text-zinc-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-zinc-800">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="mobile-menu md:hidden border-t border-zinc-800 bg-zinc-950 px-6 pb-6 pt-4 space-y-1">
+    <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm font-medium transition-colors">Home</a>
+    <details class="group/mob">
+      <summary class="flex justify-between items-center px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm font-medium cursor-pointer list-none transition-colors">Products <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></summary>
+      <div class="mt-1 ml-4 space-y-1">
+        <a href="#" class="block px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Analytics</a>
+        <a href="#" class="block px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Security</a>
+        <a href="#" class="block px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm transition-colors">Deployment</a>
+      </div>
+    </details>
+    <details>
+      <summary class="flex justify-between items-center px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm font-medium cursor-pointer list-none transition-colors">Solutions <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></summary>
+      <div class="mt-1 ml-4 space-y-1">
+        <a href="#" class="block px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm transition-colors">For Startups</a>
+        <a href="#" class="block px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm transition-colors">For Enterprise</a>
+        <a href="#" class="block px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm transition-colors">For Developers</a>
+      </div>
+    </details>
+    <a href="#" class="block px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 text-sm font-medium transition-colors">Pricing</a>
+    <div class="pt-4 border-t border-zinc-800 flex flex-col gap-2">
+      <a href="#" class="text-center text-sm text-zinc-400 hover:text-white transition-colors py-2 font-medium">Sign in</a>
+      <a href="#" class="text-center text-sm bg-orange-500 hover:bg-orange-400 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page content placeholder -->
+<div class="pt-16 flex items-center justify-center min-h-screen text-zinc-600 text-sm tracking-widest uppercase font-medium">
+  ← Hover the nav links to see dropdowns
+</div>
+
+</body>
+</html>
