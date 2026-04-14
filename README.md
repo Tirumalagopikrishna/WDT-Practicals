@@ -25,7 +25,7 @@ This repository contains all 14 Web Development Technology lab practicals.
 14. Quiz Application
 
 ## 🚀 Live Project
-(Enable GitHub Pages to view)
+https://tirumalagopikrishna.github.io/WDT-Practicals/
 
 ## 👩‍💻 Author
 Gopi💗
