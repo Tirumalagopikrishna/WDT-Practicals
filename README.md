@@ -28,4 +28,4 @@ This repository contains all 14 Web Development Technology lab practicals.
 (Enable GitHub Pages to view)
 
 ## 👩‍💻 Author
-Vinnu 💗
+Gopi💗
